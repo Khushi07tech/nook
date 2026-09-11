@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+    Nook | Ideas
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="form-action">
+        <form action="/ideas" method="POST">
+            <textarea name="raw_content" placeholder="Add an idea" class="text-area"></textarea>
+            <button type="submit" class="submit-button">➕</button>
+        </form>
+    </div>
+    
+    <div class="current_ideas">
+        {% if rows %}
+            <ul>
+            {% for row in rows %}
+                <li>{{ row.raw_content }}
+                    <span class="timestamp" title="{{ row.created_at|full_date }}">
+                        {{ row.created_at|time_ago }}
+                    </span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No ideas...</p>
+        {% endif %}
+    </div>
+{% endblock %}

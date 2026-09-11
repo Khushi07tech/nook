@@ -50,3 +50,96 @@ a:hover {
 .cute-font {
     font-family: "Fredoka", sans-serif !important;
 }
+
+.form-action form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.text-area {
+    width: 100%;
+    min-height: 140px;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 2px solid #E3CBEF;
+    border-radius: 18px;
+    background-color: #FFFDFB;
+    color: var(--text-primary);
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 18px;
+    resize: vertical;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.text-area::placeholder {
+    color: #A894AE;
+}
+
+.text-area:hover {
+    border-color: var(--accent-pink);
+}
+
+.text-area:focus {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 4px #EBDDF2;
+}
+
+.submit-button {
+    align-self: flex-start;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--accent-purple);
+    color: white;
+    font-family: "Fredoka", sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.submit-button:hover {
+    background-color: var(--accent-pink);
+    transform: translateY(-2px);
+}
+
+.current_ideas {
+    margin-top: 30px;
+}
+
+.current_ideas ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.current_ideas li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F2E5F7;
+    border: 1px solid #E3CBEF;
+    border-radius: 16px;
+    padding: 15px 18px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.current_ideas li span.timestamp {
+    font-size: 13px;
+    font-weight: 500;
+    color: #8C7896;
+    background-color: #EBDDF2;
+    padding: 4px 10px;
+    border-radius: 10px;
+    margin-left: 15px;
+    white-space: nowrap;
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.current_ideas li span.timestamp:hover {
+    color: var(--accent-purple);
+    background-color: #DFCAEC;
+}
