@@ -1,8 +1,12 @@
+import json
+import os
+from services.categorizer import categorize_idea
 from database import init_db, db_execute, get_db
 from datetime import datetime, timezone, timedelta
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 init_db()
 
@@ -66,15 +70,55 @@ def index():
 @app.route("/ideas", methods=["GET", "POST"])
 def ideas():
     if request.method == "GET":
-        rows = db_execute("SELECT * FROM ideas")
+        raw_rows = db_execute("SELECT * FROM ideas ORDER BY created_at DESC")
+
+        rows = []
+
+        for raw_row in raw_rows:
+            row_dict = dict(raw_row)
+
+            raw_tags = row_dict.get("ai_tags")
+            if raw_tags:
+                try:
+                    row_dict["ai_tags"] = json.loads(raw_tags)
+                except Exception:
+                    row_dict["ai_tags"] = []
+            else:
+                row_dict["ai_tags"] = []
+
+
+            rows.append(row_dict)
+
+
         return render_template("ideas.html", rows=rows)
+    
     else:
         raw_content = request.form.get("raw_content")
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO ideas (raw_content) VALUES (?)", (raw_content,))
-        conn.commit()
-        conn.close()
+
+        ai_content = categorize_idea(raw_content)
+
+        if ai_content:
+            ai_category = ai_content["category"]
+            ai_tags = ai_content["tags"]
+            ai_tags_str = json.dumps(ai_tags)
+
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO ideas (raw_content, ai_category, ai_tags) VALUES (?, ?, ?)", (raw_content, ai_category, ai_tags_str))
+            conn.commit()
+            conn.close()
+
+            flash(f"Idea saved and categorized as '{ai_category}'!", "success")
+        else:
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO ideas (raw_content) VALUES (?)", (raw_content,))
+            conn.commit()
+            conn.close()
+
+            flash("Idea saved (without categorization)!", "warning")
+
+
         return redirect("/ideas")
 
 

@@ -108,38 +108,125 @@ a:hover {
     margin-top: 30px;
 }
 
-.current_ideas ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.current_ideas li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.idea-card {
     background-color: #F2E5F7;
     border: 1px solid #E3CBEF;
     border-radius: 16px;
-    padding: 15px 18px;
-    margin-bottom: 12px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
     color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.current_ideas li span.timestamp {
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-badge {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-purple, #6B3BA7);
+    background-color: #EBDDF2;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.timestamp {
     font-size: 13px;
     font-weight: 500;
     color: #8C7896;
     background-color: #EBDDF2;
     padding: 4px 10px;
     border-radius: 10px;
-    margin-left: 15px;
     white-space: nowrap;
     cursor: help;
     transition: all 0.2s ease;
 }
 
-.current_ideas li span.timestamp:hover {
+.timestamp:hover {
     color: var(--accent-purple);
     background-color: #DFCAEC;
+}
+
+.card-content {
+    margin: 4px 0 6px 0;
+    font-size: 15px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tag-chip {
+    font-size: 12px;
+    font-weight: 500;
+    color: #7A5B8C;
+    background-color: #E9D7F2;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(155, 107, 179, 0.08);
+    transition: all 0.2s ease;
+}
+
+.alert-warning,
+.alert-danger,
+.alert-error {
+    background-color: #FFF0F3;
+    border-color: #F7C5D1;
+    color: #8C4356;
+}
+
+.alert-success {
+    background-color: #F0F9F5;
+    border-color: #C2E8D5;
+    color: #3B7258;
+}
+
+.alert-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: "Fredoka", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    margin-left: 15px;
+    padding: 0 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.alert-close:hover {
+    opacity: 1;
 }

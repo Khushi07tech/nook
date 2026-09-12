@@ -18,17 +18,29 @@
     
     <div class="current_ideas">
         {% if rows %}
-            <ul>
             {% for row in rows %}
-                <li>{{ row.raw_content }}
+            <div class="idea-card">
+                <div class="card-header">
+                    {% if row.ai_category %}
+                    <span class="category-badge cute-font">{{ row.ai_category }}</span>
+                    {% endif %}
+                    
                     <span class="timestamp" title="{{ row.created_at|full_date }}">
                         {{ row.created_at|time_ago }}
                     </span>
-                </li>
+                </div>
+                <p class="card-content">{{ row.raw_content }}</p>
+                <div class="card-tags">
+                    {% if row.ai_tags %}
+                    {% for tag in row.ai_tags %}
+                        <span class="tag-chip">#{{ tag }}</span>
+                    {% endfor %}    
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
-            </ul>
         {% else %}
             <p>No ideas...</p>
         {% endif %}
-    </div>
+    </div>            
 {% endblock %}
