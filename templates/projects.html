@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+    Nook | Projects
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="form-action">
+        <form action="/projects" method="POST">
+            <input type="text" name="name" placeholder="Project Name" class="input-area">
+            <select name="status" class="status-select" required>
+                <option value="" disabled selected>Select status...</option>
+                <option value="not-started">Not started</option>
+                <option value="in-progress">In Progress</option>
+                <option value="on-hold">On Hold</option>
+                <option value="completed">Completed</option>
+            </select>
+            <button type="submit" class="submit-button">➕</button>
+        </form>
+    </div>
+
+    <div class="current_projects">
+        {% if rows %}
+            {% for row in rows %}
+                <div class="project-card">
+                    <div class="card-header">
+                        <span class="project-title cute-font">{{ row.name }}</span>
+                        <span class="status-badge status-{{ row.status }}">
+                            {{ row.status | replace('-', ' ') | title}}
+                        </span>
+                    </div>
+                    <a href="/projects/{{ row.id }}/entries" class="project-card-link">Details</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No projects</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

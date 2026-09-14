@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+    Nook | {{ project.name }}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="project-detail-container">
+        <a href="/projects" class="back-link">← Back to projects</a>
+
+        <div class="project-header">
+            <h1 class="project-header-title cute-font">{{ project.name }}</h1>
+            <span class="status-badge status-{{ project.status }}">
+                {{ project.status | replace('-', ' ') | title }}
+            </span>
+        </div>
+    </div>
+
+    <div class="form-action">
+        <form action="/projects/{{ project.id }}/entries" method="POST" enctype="multipart/form-data">
+            <textarea name="raw_content" placeholder="Dump raw thoughts, tech stack notes, features, or updates..." class="text-area" required></textarea>
+            
+            <div class="form-footer-actions">
+                <input type="file" name="image" id="file-upload" class="file-input">
+                <button type="submit" class="submit-button">➕</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="project-entries">
+        <h2 class="section-title cute-font">Project Entries</h2>
+        {% if entries %}
+            {% for entry in entries %}
+                <div class="idea-card entry-card type-{{ entry.entry_type }}">
+                    <div class="card-header">
+                        <span class="category-badge">{{ entry.entry_type }}</span>
+                        <span class="timestamp" title="{{ entry.created_at|full_date }}">
+                            {{ entry.created_at|time_ago }}
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        {{ entry.raw_content }}
+                    </div>
+                    {% if entry.image_path %}
+                        <div class="entry-image-preview">
+                            <img src="{{ url_for('static', filename=entry.image_path) }}" alt="Entry upload">
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+        <p>No entries logged for this project yet.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

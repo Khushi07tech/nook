@@ -1,6 +1,8 @@
 import json
 import os
-from services.categorizer import categorize_idea
+import uuid
+from werkzeug.utils import secure_filename
+from services.categorizer import categorize_idea, categorize_entry
 from database import init_db, db_execute, get_db
 from datetime import datetime, timezone, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash
@@ -9,6 +11,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 init_db()
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def parse_sqlite_timestamp(value):
     """Safely converts SQLite datetime into a UTC-aware datetime object."""
@@ -121,7 +125,65 @@ def ideas():
 
         return redirect("/ideas")
 
+@app.route("/projects", methods=["GET", "POST"])
+def projects():
+    if request.method == "GET":
+        rows = db_execute("SELECT * FROM projects ORDER BY created_at DESC")
+        return render_template("projects.html", rows=rows)
+    else:
+        name = request.form.get("name")
+        status = request.form.get("status")
+
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO projects (name, status) VALUES (?, ?)", (name, status))
+        conn.commit()
+        conn.close()
+
+        flash(f"Project saved as '{name}'", "success")
+
+        return redirect("/projects")
+
+@app.route("/projects/<int:project_id>/entries", methods=["GET", "POST"])
+def project_entries(project_id):
+    if request.method == "GET":
+        project = db_execute("SELECT * FROM projects WHERE id = ?", (project_id,))[0]
+        entries = db_execute("SELECT * FROM entries WHERE project_id = (?) ORDER BY entry_type ASC, created_at DESC", (project_id,))
+        return render_template("project_detail.html", project=project, entries=entries)
+    else:
+        raw_content = request.form.get("raw_content")
+        ai_content = categorize_entry(raw_content)
+
+        image = request.files.get("image")
+
+        image_path = None
+
+        if image and image.filename != "":
+            filename = secure_filename(image.filename)
+            filename = f"{uuid.uuid4().hex}_{filename}"
+
+            save_location = os.path.join(UPLOAD_FOLDER, filename)
+            image.save(save_location)
+
+            image_path = f"uploads/{filename}"            
+
+        if ai_content:
+            entry_type = ai_content["entry_type"]
+            db_execute("INSERT INTO entries (project_id, raw_content, image_path, entry_type) VALUES (?, ?, ?, ?)", (project_id, raw_content, image_path, entry_type))
+
+            flash(f"Entry saved and categorized as '{entry_type}'", "success")
+
+            return redirect(f"/projects/{project_id}/entries")
+        else:
+            db_execute("INSERT INTO entries (project_id, raw_content, image_path) VALUES (?, ?, ?)", (project_id, raw_content, image_path))
+
+            flash("Entry saved (without categorization)", "warning")
+            return redirect(f"/projects/{project_id}/entries")
 
 # Launch flask developement server
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+

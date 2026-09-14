@@ -41,4 +41,33 @@ def categorize_idea(content: str) -> dict:
             return None
     else:
         return None
-        
+
+
+def categorize_entry(content: str) -> dict: 
+    prompt = f"""
+            Raw content = {content}
+            Analyze the provided raw content and classify it into EXACTLY ONE of the following types:\n
+            - tech-stack: Mentions of languages, frameworks, libraries, DBs, or tools (e.g., Flask, SQLite, Jinja2).\n
+            - skill: Concepts learned, tutorials completed, or theoretical insights gained.\n
+            - feature: Code updates, UI tweaks, new implementations, or functional progress.\n
+            - crisis: Bugs, errors, unexpected issues, blocker reports, or debugging logs.\n
+            - version: Release notes, deployment updates, build tags, or milestone completions.\n
+            - image: Primary focus on visual designs, UI screenshots, assets, or graphics.\n
+            - general: Used only as a last resort\n\n
+            Respond ONLY with a valid JSON object containing a single key 'entry_type' matching 
+            one of the exact kebab-case values above.
+    """
+
+    raw_response = call_llm(prompt)
+
+    if raw_response:
+        try:    
+            response = raw_response.strip().replace("```json", "").replace("```", "")
+            response = json.loads(response)
+            return response 
+        except Exception as e:
+            flash(f"{e}", "error")
+            return None
+    else:
+        return None
+    
