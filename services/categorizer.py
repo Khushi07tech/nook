@@ -70,4 +70,15 @@ def categorize_entry(content: str) -> dict:
             return None
     else:
         return None
+
+def chat_msg(content: str) -> dict:
+    prompt = f"""
+        You are Khushi's thinking companion. Here's what she's been working on: {content}. Be warm, direct, and don't just validate — actually engage. The context is just so that you are a context-aware bot, this does not mean that we should only talk about the context, its only there for familiartiy and more warmth. Also, keep your message short and fun as if i am talking to a friend. 
+    """
     
+    response = call_llm(prompt)
+
+    if response: 
+        return response
+    else:
+        return None

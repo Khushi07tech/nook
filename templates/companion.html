@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Companion
+{% endblock %}
+
+{% block body %}
+    <div class="chat-container" data-project-id="{{ project_id or '' }}">
+        <!-- Header -->
+        <div class="chat-header">
+            <h2 class="section-title cute-font">Companion</h2>
+            <p class="chat-subtitle">
+                {% if project_id %}
+                    Project-scoped AI partner
+                {% else %}
+                    Your AI thought partner & sounding board
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Chat History Stream -->
+        <div class="chat-messages" id="chatMessages">
+            {% if msgs %}
+                {% for msg in msgs %}
+                    <div class="chat-bubble-wrapper {{ 'user-wrapper' if msg.role == 'user' or msg.sender == 'user' else 'assistant-wrapper' }}">
+                        <!-- Fixed assistant-wrapper -> assistant-bubble typo below -->
+                        <div class="chat-bubble {{ 'user-bubble' if msg.role == 'user' or msg.sender == 'user' else 'assistant-bubble' }}">
+                            <div class="message-content">
+                                {{ msg.content }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="chat-empty-state">
+                    <p>No messages yet. Start a conversation below!</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Input Form Area -->
+        <div class="form-action chat-form-container">
+            <!-- Updated url_for to point to 'chat' for both cases -->
+            <form action="{{ url_for('chat', project_id=project_id) if project_id else url_for('chat') }}" method="POST" class="chat-form">
+                <textarea name="msg" placeholder="Talk to your companion..." class="text-area chat-textarea" rows="2" required></textarea>
+                <button type="submit" class="submit-button chat-submit-btn">Send</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
