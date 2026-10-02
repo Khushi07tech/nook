@@ -63,3 +63,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+document.addEventListener('keydown', (event) => {
+  // Check if Enter key was pressed
+  if (event.key === 'Enter') {
+    const target = event.target;
+
+    // Target single-line input boxes or textareas
+    if (target.matches('input[type="text"], textarea')) {
+      // Allow Shift + Enter to create a new line in textareas
+      if (event.shiftKey && target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      // Prevent default new line / form submit behavior
+      event.preventDefault();
+
+      // Find the associated form or send button
+      const form = target.closest('form');
+      const sendButton = form 
+        ? form.querySelector('button[type="submit"], .send-btn') 
+        : target.parentElement.querySelector('.send-btn');
+
+      if (sendButton) {
+        sendButton.click();
+      } else if (form) {
+        form.requestSubmit(); // Triggers native form submit & validation
+      }
+    }
+  }
+});

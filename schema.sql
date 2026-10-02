@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS ideas (
     raw_content TEXT,
     ai_category TEXT,
     ai_tags TEXT,
+    is_active INTEGER DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -10,6 +11,8 @@ CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     status TEXT,
+    summary TEXT,
+    is_active INTEGER DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -18,7 +21,7 @@ CREATE TABLE IF NOT EXISTS entries (
     project_id INTEGER,
     entry_type TEXT,
     raw_content TEXT,
-    image_path TEXT,
+    is_active INTEGER DEFAULT 1,
     ai_summary TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

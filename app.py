@@ -134,10 +134,11 @@ def projects():
     else:
         name = request.form.get("name")
         status = request.form.get("status")
+        summary = request.form.get("summary")
 
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO projects (name, status) VALUES (?, ?)", (name, status))
+        cursor.execute("INSERT INTO projects (name, status, summary) VALUES (?, ?, ?)", (name, status, summary))
         conn.commit()
         conn.close()
 
@@ -191,7 +192,7 @@ def chat(project_id=None):
 
         # Dynamic context gathering based on scope
         if project_id:
-            projects = db_execute("SELECT name, status FROM projects WHERE id = ?", (project_id,))
+            projects = db_execute("SELECT name, status, summary FROM projects WHERE id = ?", (project_id,))
             entries = db_execute("SELECT entry_type, raw_content FROM entries WHERE project_id = ? ORDER BY id DESC LIMIT 15", (project_id,))
             msgs = db_execute("SELECT role, content FROM chat_messages WHERE project_id = ? ORDER BY id DESC LIMIT 10", (project_id,))
         else:
@@ -201,11 +202,11 @@ def chat(project_id=None):
 
         # Format context
         entry_formatted = "\n".join([f"- [{row['entry_type']}] {row['raw_content']}" for row in entries]) if entries else "None"
-        project_formatted = "\n".join([f"- {row['name']} ({row['status']})" for row in projects]) if projects else "None"
+        project_formatted = "\n".join([f"- {row['name']} ({row['status']}): {row['summary']}" for row in projects]) if projects else "None"
         msgs_formatted = "\n".join([f"{row['role'].capitalize()}: {row['content']}" for row in reversed(msgs)]) if msgs else "None"
 
         context = inspect.cleandoc(f"""
-            === ACTIVE PROJECTS ===
+            === PROJECTS ===
             {project_formatted}
 
             === RECENT ENTRIES ===
