@@ -288,4 +288,4 @@ def chat(project_id=None):
 
 # Launch Flask development server
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
