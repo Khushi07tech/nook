@@ -103,7 +103,7 @@ To run the test suite:
 
 ---
 
-## 🔮 Roadmap (Nook v2 Features):
+## Roadmap (Nook v2):
 Authentication: User registration, logins, and session security.
 
 Vault Integration (The Big One): Connect the Ideas Vault directly to the Project Tracker so ideas related to existing projects automatically sync into the project entries instead of staying in isolation.
