@@ -122,7 +122,7 @@ def ideas():
     """Fetching active ideas or parsing and inserting new categorized ideas."""
     if request.method == "GET":
         db = get_db()
-        raw_rows = db.execute("SELECT * FROM ideas WHERE is_active = 1 ORDER BY created_at DESC")
+        raw_rows = db.execute("SELECT * FROM ideas WHERE is_active = 1 ORDER BY created_at DESC").fetchall()
         ideas = []
 
         for raw_row in raw_rows:
@@ -179,7 +179,7 @@ def projects():
         db.commit()
 
         flash(f"Project saved as '{name}'", "success")
-        return redirect(url_for("/projects"))
+        return redirect(url_for("projects"))
 
 @app.route("/projects/<int:project_id>/entries", methods=["GET", "POST"])
 def project_entries(project_id):
