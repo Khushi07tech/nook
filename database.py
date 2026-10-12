@@ -1,27 +1,13 @@
+from flask import g
 import sqlite3
 
 # Database connection getter
 def get_db():
-    conn = sqlite3.connect("nook.db")
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON;")
-    return conn
-
-
-# Handle query management for simple queries
-def db_execute(query, params=()):
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute(query, params)
-
-    if query.strip().upper().startswith("SELECT"):
-        results = cursor.fetchall()
-    else:
-        results = None
-        conn.commit()
-
-    conn.close()
-    return results
+    if 'db' not in g:
+        g.db = sqlite3.connect("nook.db")
+        g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON;")
+    return g.db
 
 # Runs schema.sql once
 def init_db():

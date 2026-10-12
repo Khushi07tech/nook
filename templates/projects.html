@@ -9,7 +9,7 @@
 {% block body %}
 
     <div class="form-action">
-        <form action="/projects" method="POST">
+        <form action="{{ url_for('projects') }}" method="POST">
             <input type="text" name="name" placeholder="Project Name" class="input-area">
             <select name="status" class="status-select" required>
                 <option value="" disabled selected>Select status...</option>
@@ -24,16 +24,19 @@
     </div>
 
     <div class="current_projects">
-        {% if rows %}
-            {% for row in rows %}
+        {% if projects %}
+            {% for project in projects %}
                 <div class="project-card">
                     <div class="card-header">
-                        <span class="project-title cute-font">{{ row.name }}</span>
-                        <span class="status-badge status-{{ row.status }}">
-                            {{ row.status | replace('-', ' ') | title}}
+                        <span class="project-title cute-font">{{ project.name }}</span>
+                        <span class="status-badge status-{{ project.status }}">
+                            {{ project.status | replace('-', ' ') | title}}
                         </span>
                     </div>
-                    <a href="/projects/{{ row.id }}/entries" class="project-card-link">Details</a>
+                    <a href="{{ url_for('project_entries', project_id=project.id) }}" class="project-card-link">Details</a>
+                <form action="{{ url_for('delete_row', item_type='projects', entry_id=project.id) }}" method="POST" class="delete-form">
+                    <button type="submit" class="delete-button">✖</button>
+                </form>
                 </div>
             {% endfor %}
         {% else %}

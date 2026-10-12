@@ -12,6 +12,6 @@ def call_llm(prompt: str) -> str:
         )    
         return response.choices[0].message.content.strip()
     except Exception as e:
-        flash(f"{e}", "error")
+        print(f"LLM API Error: {e}", file=sys.stderr)
         return None
 

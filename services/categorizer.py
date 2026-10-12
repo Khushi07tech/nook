@@ -82,3 +82,27 @@ def chat_msg(content: str) -> dict:
         return response
     else:
         return None
+
+def ai_quote():
+
+    prompt = """
+        Generate a short, techie, cool, and somewhat hilarious quote about coding, debugging, or a programmer's existential crisis. 
+
+        Rules:
+        1. Keep it under 20 words.
+        2. Include specific programming or technology terms (such as python, flask, sqlite, git, commit, cpp, sql, null, etc.).
+
+        Examples of the style and tone to match:
+        - git commit -m 'please work this time'
+        - segfaults happen because the compiler hates my life choices
+        - debugging Python at 3 AM is pure SQL self-harm
+        - flask routes are fine until the database connection loses its will to live
+        - git push origin main and pray the Flask routing gods forgive my python sins
+    """
+
+    response = call_llm(prompt)
+
+    if response:
+        return response 
+    else: 
+        return None

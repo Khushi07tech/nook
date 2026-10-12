@@ -9,9 +9,9 @@
 {% block body %}
 
     <div class="project-detail-container">
-        <a href="/projects" class="back-link">← Back to projects</a>
+        <a href="{{ url_for('projects') }}" class="back-link">← Back to projects</a>
         
-        <a href="/chat/{{ project.id }}" class="submit-button chat-link-btn">💬 Chat with Companion</a>
+        <a href="{{ url_for('chat', project_id=project.id) }}" class="submit-button chat-link-btn">💬 Chat with Companion</a>
 
         <div class="project-header">
             <h1 class="project-header-title cute-font">{{ project.name }}</h1>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-action">
-        <form action="/projects/{{ project.id }}/entries" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('project_entries', project_id=project.id) }}" method="POST" enctype="multipart/form-data">
             <textarea name="raw_content" placeholder="Dump raw thoughts, tech stack notes, features, or updates..." class="text-area" required></textarea>
             
             <div class="form-footer-actions">
@@ -52,6 +52,9 @@
                             <img src="{{ url_for('static', filename=entry.image_path) }}" alt="Entry upload">
                         </div>
                     {% endif %}
+                    <form action="{{ url_for('delete_row', item_type='entries', entry_id=entry.id) }}" method="POST" class="delete-form">
+                        <button type="submit" class="delete-button">✖</button>
+                    </form>
                 </div>
             {% endfor %}
         {% else %}

@@ -1,15 +1,38 @@
 {% extends "base.html" %}
 
-
 {% block title %}
-
-    Nook | Homepage
-
+    Nook | Dashboard
 {% endblock %}
-
 
 {% block body %}
 
-    <h1 class="cute-font">Hello, Khushi</h1>
+    <div class="quote-banner">
+        <h2>Dev Humor</h2>
+        <p class="quote-text">'{{ quote }}'</p>
+    </div>
+
+    <div class="dashboard-metrics">
+        <div class="metric-card">
+            <h3>Ideas</h3>
+            <p class="metric-number">{{ ideas }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>In Progress</h3>
+            <p class="metric-number">{{ active_projects }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>Not Started</h3>
+            <p class="metric-number">{{ not_started_projects }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>On Hold</h3>
+            <p class="metric-number">{{ on_hold_projects }}</p>
+        </div>
+        <div class="metric-card">
+            <h3>Completed</h3>
+            <p class="metric-number">{{ completed_projects }}</p>
+        </div>
+    </div>
+
 
 {% endblock %}

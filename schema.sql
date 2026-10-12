@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS entries (
     entry_type TEXT,
     raw_content TEXT,
     is_active INTEGER DEFAULT 1,
-    ai_summary TEXT,
+    image_path TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (project_id) REFERENCES projects(id)
