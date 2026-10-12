@@ -12,7 +12,6 @@
   - [Installation](#installation)
 - [Testing](#testing)
 - [Roadmap (Nook v2)](#roadmap-nook-v2)
-- [License](#license)
 
 ---
 
